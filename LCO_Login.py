@@ -29,7 +29,12 @@ def verify():
     if res:
         for i in res:
             logged()
+
+
             break
+    elif e_id.get()=='admin' and e_pass.get()=='admin':
+        window.withdraw()
+        import Admin
     else:
         messagebox.showerror("Error","Please Enter Valid User ")
 
@@ -43,46 +48,46 @@ def logged():
     mycursor.execute(uCom1,infoU1)
     mydb.commit()
     messagebox.showinfo('info',"successfully signed in")
+    window.withdraw()
+    import Buttons
+
+
 
 
 def out():
-    messagebox.showinfo("MESSAGE","YO ARE ABOUT TO SIGN OUT")
-    do=datetime.now()
+    user_v=e_id.get()
+    pass_v=e_pass.get()
+    sql=" (select * from user where username=%s and password=%s)"
+    mycursor.execute(sql,[(user_v),pass_v])
+    res=mycursor.fetchall()
+    if res:
+        for i in res:
+            sout()
+            break
+    elif e_id.get()=='admin' and e_pass.get()=='admin':
+        window.withdraw()
+        import Admin
+    else:
+        messagebox.showerror("Error","Please Enter Valid User ")
+
+
+def sout():
     t=d.strftime("%H;%M")
     dt=d.strftime("%d/%m/%y")
-    uCom2="update user set sign_out=%s,status=%s, sign_in=%s where username=%s "
-    infoU2=(do,'OUT','NULL',e_id.get())
-    mycursor.execute(uCom2,infoU2)
+    uCom1="update user set sign_out=%s,status=%s,sign_in=%s  where username=%s "
+    infoU1=(d,'OUT','NULL',e_id.get())
+    mycursor.execute(uCom1,infoU1)
     mydb.commit()
+    messagebox.showinfo('info',"successfully signed out")
 
-
-
-
-
-'''
-    import mysql.connector
-    mydb=mysql.connector.connect(user='lifechoices',password='@Lifechoices1234',
-                             host='127.0.0.1',database='lifechoicesonline',
-                             auth_plugin='mysql_native_password'
-                             )
-
-    mycursor=mydb.cursor()
-  #  id_max=(mycursor.execute("select * from user"))
-    sql="UPDATE user SET sign_in=%s WHERE password=%s "
-    val=(str(time) )
-    mycursor.execute(sql,val)
-    mydb.commit()
-    print(mycursor.rowcount,"record inserted.")
-    xy=mycursor.execute('select * from user')
-    for i in mycursor:
-        print(i)'''
 
 
 
 xy=mycursor.execute('SELECT count(*) from user')
 for i in mycursor:
     print("There are {} records".format(i))
-'''<-------------------END OF FUNCTIONS----------------------------------------------------->'''
+
+
 import time
 
 time1 = ''
@@ -102,6 +107,8 @@ def tick():
     clock.after(200, tick)
 
 tick()
+'''<-------------------END OF FUNCTIONS----------------------------------------------------->'''
+
 
 
 clock.pack(fill=BOTH, )

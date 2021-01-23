@@ -1,5 +1,6 @@
 import tkinter
 from tkinter import *
+from tkinter import messagebox
 from datetime import datetime
 now = datetime.now()
 time = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -12,31 +13,40 @@ do=datetime.now()
 
 
 def register_name_update():
-    name=e_id.get()
-    username=e_username.get()
-    password=e_password.get()
-
-
-    import mysql.connector
-
-
-
-
-    mydb=mysql.connector.connect(user='lifechoices',password='@Lifechoices1234',
+        name=e_id.get()
+        username=e_username.get()
+        password=e_password.get()
+        import mysql.connector
+        mydb=mysql.connector.connect(user='lifechoices',password='@Lifechoices1234',
                              host='127.0.0.1',database='lifechoicesonline',
                              auth_plugin='mysql_native_password'
                              )
 
-    mycursor=mydb.cursor()
+        mycursor=mydb.cursor()
   #  id_max=(mycursor.execute("select * from user"))
-    sql="UPDATE user SET full_name = %s, username=%s, password= %s,status=%s,mobile_number=%s, date_joined=%s WHERE full_name ='' "
-    val=(str(e_id.get()),str(e_username.get()),str(e_password.get()),'IN',str(e_number.get()),now)
-    mycursor.execute(sql,val)
-    mydb.commit()
-    print(mycursor.rowcount,"record inserted.")
-    xy=mycursor.execute('select * from user')
-    for i in mycursor:
-        print(i)
+        sql="UPDATE user SET full_name = %s, username=%s, password= %s,status=%s,mobile_number=%s, date_joined=%s WHERE full_name ='' "
+        val=(str(e_id.get()),str(e_username.get()),str(e_password.get()),'IN',str(e_number.get()),now)
+        if name=='' or username=='' or password=='':
+            messagebox.showerror("Error"," Enter ALL fields ")
+
+
+        else:
+
+            mycursor.execute(sql,val)
+            mydb.commit()
+            print(mycursor.rowcount,"record inserted.")
+            xy=mycursor.execute('select * from user')
+            messagebox.showinfo('Message',"User Added")
+            window.withdraw()
+            import Buttons
+
+
+
+            for i in mycursor:
+                print(i)
+
+
+
 
 
 
